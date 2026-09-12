@@ -35,30 +35,36 @@ export default function CreatePost() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-100 p-8">
-      <h1 className="text-3xl font-bold">投稿を作成</h1>
+    <main className="min-h-screen bg-gray-100 p-8 text-gray-900">
+      <h1 className="text-3xl font-bold text-gray-950">
+        投稿を作成
+      </h1>
 
-      <p className="mt-2 text-gray-600">
+      <p className="mt-2 text-gray-700">
         投稿するSNSと内容を設定してください
       </p>
 
       <div className="mt-8 max-w-2xl rounded-xl bg-white p-6 shadow">
-        <label className="font-semibold">投稿内容</label>
+        <label className="font-bold text-gray-950">
+          投稿内容
+        </label>
 
         <textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          className="mt-2 h-40 w-full rounded-lg border p-3"
+          className="mt-2 h-40 w-full rounded-lg border border-gray-400 p-3 text-gray-950"
           placeholder="ここに投稿内容を入力..."
         />
 
         <div className="mt-6">
-          <p className="font-semibold">投稿先</p>
+          <p className="font-bold text-gray-950">
+            投稿先
+          </p>
 
           <select
             value={platform}
             onChange={(e) => setPlatform(e.target.value)}
-            className="mt-3 rounded-lg border p-3"
+            className="mt-3 rounded-lg border border-gray-400 p-3 text-gray-950"
           >
             <option value="Instagram">Instagram</option>
             <option value="X">X</option>
@@ -67,16 +73,18 @@ export default function CreatePost() {
         </div>
 
         <div className="mt-6">
-          <p className="font-semibold">予約日時</p>
+          <p className="font-bold text-gray-950">
+            予約日時
+          </p>
 
           <input
             type="datetime-local"
             value={scheduledAt}
             onChange={(e) => setScheduledAt(e.target.value)}
-            className="mt-3 rounded-lg border p-3"
+            className="mt-3 rounded-lg border border-gray-400 p-3 text-gray-950"
           />
 
-          <p className="mt-2 text-sm text-gray-500">
+          <p className="mt-2 text-sm text-gray-600">
             空欄なら下書きとして保存されます。
           </p>
         </div>
@@ -84,14 +92,16 @@ export default function CreatePost() {
         <div className="mt-8">
           <button
             onClick={savePost}
-            className="rounded-lg bg-black px-5 py-3 text-white"
+            className="rounded-lg bg-black px-5 py-3 font-semibold text-white"
           >
             保存する
           </button>
         </div>
 
         {message && (
-          <p className="mt-4 font-semibold">{message}</p>
+          <p className="mt-4 font-semibold text-gray-900">
+            {message}
+          </p>
         )}
       </div>
     </main>

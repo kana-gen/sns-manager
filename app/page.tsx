@@ -2,48 +2,81 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-gray-100 p-8">
-      <h1 className="text-3xl font-bold">
+    <main className="min-h-screen bg-gray-100 p-8 text-gray-900">
+      <h1 className="text-3xl font-bold text-gray-950">
         SNS Manager
       </h1>
 
-      <p className="mt-2 text-gray-600">
+      <p className="mt-2 text-gray-700">
         Instagram・X・Threadsをまとめて管理
       </p>
 
       <div className="mt-8 grid gap-4 md:grid-cols-3">
         <div className="rounded-xl bg-white p-6 shadow">
-          <h2 className="text-xl font-semibold">Instagram</h2>
-          <p className="mt-2 text-gray-500">未接続</p>
+          <h2 className="text-xl font-bold text-gray-950">
+            Instagram
+          </h2>
+          <p className="mt-2 font-medium text-gray-700">
+            未接続
+          </p>
         </div>
 
         <div className="rounded-xl bg-white p-6 shadow">
-          <h2 className="text-xl font-semibold">X</h2>
-          <p className="mt-2 text-gray-500">未接続</p>
+          <h2 className="text-xl font-bold text-gray-950">
+            X
+          </h2>
+
+          <p className="mt-2 font-medium text-gray-700">
+            未接続
+          </p>
+
+          <Link
+            href="/api/auth/x"
+            className="mt-4 inline-block rounded-lg bg-black px-4 py-2 font-semibold text-white"
+          >
+            Xを接続
+          </Link>
+
+          <p className="mt-2 text-sm text-gray-600">
+            Xアカウントを接続します
+          </p>
         </div>
 
         <div className="rounded-xl bg-white p-6 shadow">
-          <h2 className="text-xl font-semibold">Threads</h2>
-          <p className="mt-2 text-gray-500">未接続</p>
+          <h2 className="text-xl font-bold text-gray-950">
+            Threads
+          </h2>
+          <p className="mt-2 font-medium text-gray-700">
+            未接続
+          </p>
         </div>
       </div>
 
       <div className="mt-8 rounded-xl bg-white p-6 shadow">
-        <h2 className="text-xl font-semibold">投稿管理</h2>
+        <h2 className="text-xl font-bold text-gray-950">
+          投稿管理
+        </h2>
 
-        <div className="mt-4 flex gap-4">
+        <div className="mt-4 flex flex-wrap gap-4">
           <Link
             href="/create"
-            className="rounded-lg bg-black px-5 py-3 text-white"
+            className="rounded-lg bg-black px-5 py-3 font-semibold text-white"
           >
             投稿を作成
           </Link>
 
           <Link
             href="/posts"
-            className="rounded-lg border px-5 py-3"
+            className="rounded-lg border border-gray-400 px-5 py-3 font-semibold text-gray-900"
           >
             投稿履歴
+          </Link>
+
+          <Link
+            href="/calendar"
+            className="rounded-lg border border-gray-400 px-5 py-3 font-semibold text-gray-900"
+          >
+            📅 投稿カレンダー
           </Link>
         </div>
       </div>
