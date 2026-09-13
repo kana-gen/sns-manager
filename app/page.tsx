@@ -1,4 +1,5 @@
 import Link from "next/link";
+import LogoutButton from "./components/LogoutButton";
 import { cookies } from "next/headers";
 
 export default async function Home() {
@@ -19,6 +20,9 @@ export default async function Home() {
       <p className="mt-2 text-gray-700">
         Instagram・X・Threadsをまとめて管理
       </p>
+<div className="mt-4">
+  <LogoutButton />
+</div>
 
       <div className="mt-8 grid gap-4 md:grid-cols-3">
         <div className="rounded-xl bg-white p-6 shadow">
