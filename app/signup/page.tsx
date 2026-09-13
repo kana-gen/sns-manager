@@ -1,22 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 
-export default function LoginPage() {
+export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
 
-  useEffect(() => {
-    const savedEmail = localStorage.getItem("sns_manager_email");
-
-    if (savedEmail) {
-      setEmail(savedEmail);
-    }
-  }, []);
-
-  async function handleLogin() {
+  async function handleSignUp() {
     setMessage("");
 
     if (!email || !password) {
@@ -26,19 +18,20 @@ export default function LoginPage() {
 
     const supabase = createClient();
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
+      },
     });
 
     if (error) {
-      setMessage(`ログインに失敗しました: ${error.message}`);
+      setMessage(`登録に失敗しました: ${error.message}`);
       return;
     }
 
-    localStorage.setItem("sns_manager_email", email);
-
-    window.location.href = "/";
+    window.location.href = "/signup-complete";
   }
 
   return (
@@ -49,7 +42,7 @@ export default function LoginPage() {
         </h1>
 
         <p className="mt-2 text-gray-700">
-          ログイン
+          新規登録
         </p>
 
         <label className="mt-6 block font-bold text-gray-950">
@@ -60,7 +53,7 @@ export default function LoginPage() {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          autoComplete="email"
+          autoComplete="off"
           className="mt-2 w-full rounded-lg border border-gray-400 p-3 text-gray-950"
           placeholder="メールアドレス"
         />
@@ -79,19 +72,19 @@ export default function LoginPage() {
         />
 
         <button
-          onClick={handleLogin}
+          onClick={handleSignUp}
           className="mt-6 w-full rounded-lg bg-black px-5 py-3 font-semibold text-white"
         >
-          ログイン
+          仮登録する
         </button>
 
         <button
           onClick={() => {
-            window.location.href = "/signup";
+            window.location.href = "/login";
           }}
           className="mt-3 w-full rounded-lg border border-gray-400 px-5 py-3 font-semibold text-gray-900"
         >
-          新規登録はこちら
+          ログインはこちら
         </button>
 
         {message && (

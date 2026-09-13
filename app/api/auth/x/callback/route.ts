@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@/utils/supabase/server";
 
 export async function GET(request: NextRequest) {
   const code = request.nextUrl.searchParams.get("code");
@@ -32,6 +33,19 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(
       { error: "PKCE情報が見つかりませんでした" },
       { status: 400 }
+    );
+  }
+
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    return NextResponse.redirect(
+      new URL("/login?error=x_login_required", request.url)
     );
   }
 
@@ -100,7 +114,60 @@ export async function GET(request: NextRequest) {
   }
 
   const userData = await userResponse.json();
+
+  const platformUserId = userData.data?.id ?? "";
   const username = userData.data?.username ?? "";
+
+  if (!platformUserId) {
+    return NextResponse.json(
+      { error: "XユーザーIDを取得できませんでした" },
+      { status: 500 }
+    );
+  }
+
+  const { error: accountError } = await supabase
+    .from("social_accounts")
+    .upsert(
+      {
+        user_id: user.id,
+        platform: "X",
+        platform_user_id: platformUserId,
+        username,
+        updated_at: new Date().toISOString(),
+      },
+      {
+        onConflict: "user_id,platform,platform_user_id",
+      }
+    );
+
+  if (accountError) {
+    return NextResponse.json(
+      {
+        error: "Xアカウント情報の保存に失敗しました",
+        details: accountError.message,
+      },
+      { status: 500 }
+    );
+  }
+
+  const { error: tokenError } = await supabase
+    .from("social_tokens")
+    .insert({
+      user_id: user.id,
+      platform: "X",
+      access_token: tokenData.access_token,
+      refresh_token: tokenData.refresh_token ?? null,
+    });
+
+  if (tokenError) {
+    return NextResponse.json(
+      {
+        error: "X認証情報の保存に失敗しました",
+        details: tokenError.message,
+      },
+      { status: 500 }
+    );
+  }
 
   const response = NextResponse.redirect(
     new URL("/", request.url)
