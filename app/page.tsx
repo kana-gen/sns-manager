@@ -1,6 +1,15 @@
 import Link from "next/link";
+import { cookies } from "next/headers";
 
-export default function Home() {
+export default async function Home() {
+  const cookieStore = await cookies();
+
+  const xConnected =
+    cookieStore.get("x_connected")?.value === "1";
+
+  const xUsername =
+    cookieStore.get("x_username")?.value ?? "";
+
   return (
     <main className="min-h-screen bg-gray-100 p-8 text-gray-900">
       <h1 className="text-3xl font-bold text-gray-950">
@@ -16,6 +25,7 @@ export default function Home() {
           <h2 className="text-xl font-bold text-gray-950">
             Instagram
           </h2>
+
           <p className="mt-2 font-medium text-gray-700">
             未接続
           </p>
@@ -26,26 +36,43 @@ export default function Home() {
             X
           </h2>
 
-          <p className="mt-2 font-medium text-gray-700">
-            未接続
-          </p>
+          {xConnected ? (
+            <>
+              <p className="mt-2 font-bold text-green-700">
+                接続済み
+              </p>
 
-          <Link
-            href="/api/auth/x"
-            className="mt-4 inline-block rounded-lg bg-black px-4 py-2 font-semibold text-white"
-          >
-            Xを接続
-          </Link>
+              {xUsername && (
+                <p className="mt-1 text-gray-700">
+                  @{xUsername}
+                </p>
+              )}
+            </>
+          ) : (
+            <>
+              <p className="mt-2 font-medium text-gray-700">
+                未接続
+              </p>
 
-          <p className="mt-2 text-sm text-gray-600">
-            Xアカウントを接続します
-          </p>
+              <Link
+                href="/api/auth/x"
+                className="mt-4 inline-block rounded-lg bg-black px-4 py-2 font-semibold text-white"
+              >
+                Xを接続
+              </Link>
+
+              <p className="mt-2 text-sm text-gray-600">
+                Xアカウントを接続します
+              </p>
+            </>
+          )}
         </div>
 
         <div className="rounded-xl bg-white p-6 shadow">
           <h2 className="text-xl font-bold text-gray-950">
             Threads
           </h2>
+
           <p className="mt-2 font-medium text-gray-700">
             未接続
           </p>

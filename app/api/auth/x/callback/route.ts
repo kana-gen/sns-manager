@@ -100,15 +100,25 @@ export async function GET(request: NextRequest) {
   }
 
   const userData = await userResponse.json();
+  const username = userData.data?.username ?? "";
 
   const response = NextResponse.redirect(
-    new URL(
-      `/?x_connected=1&username=${encodeURIComponent(
-        userData.data?.username ?? ""
-      )}`,
-      request.url
-    )
+    new URL("/", request.url)
   );
+
+  response.cookies.set("x_connected", "1", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "lax",
+    path: "/",
+  });
+
+  response.cookies.set("x_username", username, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "lax",
+    path: "/",
+  });
 
   response.cookies.delete("x_oauth_state");
   response.cookies.delete("x_code_verifier");
